@@ -1,0 +1,24 @@
+models:
+  - name: stg_nations
+    description: Table for nation's data
+    columns:
+      - name: nation_id
+        data_tests:
+          - unique
+          - not_null
+        - name: region_id
+          description: foreign key for this table
+          data_tests:
+            - relationships:
+                to: ref('stg_region')
+                field: region_id
+  - name: stg_regions
+    columns:
+      - name: region_name
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['AFRICA', 'AMERICA', 'ASIA', 'EUROPE','MIDDLE EAST']
+              config:
+                store_failures: TRUE
+  

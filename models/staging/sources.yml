@@ -6,3 +6,9 @@ sources:
       - name: regions 
       - name: nations 
       - name: customers
+      - name: orders
+        config:
+          freshness:
+            warn_after: {count: 6, period: day}
+            error_after: {count: 153, period: day}
+          loaded_at_field: order_date::timestamp_ntz
