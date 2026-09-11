@@ -1,12 +1,4 @@
-{{ config(
-    materialized='view'
-) }}
-
-with orders as (
-    select * from {{ ref('stg_orders') }}
-),
-
-customers as (
+with customers as (
     select * from {{ ref('stg_customers') }}
 ),
 
@@ -19,34 +11,20 @@ regions as (
 )
 
 select
-    -- Order attributes
-    orders.order_id,
-    orders.order_date,
-    orders.order_status,
-    orders.order_priority,
-    orders.total_price,
-    orders.clerk,
-    orders.ship_priority,
-
     -- Customer attributes
-    customers.customer_id,
-    customers.customer_name,
-    customers.market_segment,
-    customers.account_balance,
-    customers.phone_number,
+    c.customer_id,
+    c.customer_name,
+    c.address,
+    c.phone_number,
+    c.account_balance,
+    c.market_segment,
 
-    -- Nation attributes
-    nations.nation_id,
-    nations.nation_name,
+    -- Location attributes
+    n.nation_name,
+    r.region_name
 
-    -- Region attributes
-    regions.region_id,
-    regions.region_name
-
-from orders
-left join customers
-    on orders.customer_id = customers.customer_id
-left join nations
-    on customers.nation_id = nations.nation_id
-left join regions
-    on nations.region_id = regions.region_id
+from customers c
+left join nations n
+    on c.nation_id = n.nation_id
+left join regions r
+    on n.region_id = r.region_id
